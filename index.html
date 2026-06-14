@@ -165,6 +165,7 @@
       <footer class="footer page__section">
         <p class="footer__copyright">© 2025 Around The U.S.</p>
       </footer>
+      
       <div class="popup" id="edit-popup">
         <div class="popup__content">
           <button
@@ -173,23 +174,36 @@
             type="button"
           ></button>
           <h3 class="popup__title">Editar perfil</h3>
-          <form class="popup__form" id="edit-profile-form">
+          <form class="popup__form" id="edit-profile-form" novalidate>
             <input
+              id="profile-name"
               class="popup__input popup__input_type_name"
               name="name"
               placeholder="Nombre"
               type="text"
+              required
+              minlength="2"
+              maxlength="40"
             />
+            <span class="popup__input-error profile-name-error"></span>
+            
             <input
+              id="profile-about"
               class="popup__input popup__input_type_description"
               name="description"
               placeholder="Acerca de mí"
               type="text"
+              required
+              minlength="2"
+              maxlength="200"
             />
+            <span class="popup__input-error profile-about-error"></span>
+            
             <button class="button popup__button" type="submit">Guardar</button>
           </form>
         </div>
       </div>
+      
       <div class="popup" id="new-card-popup">
         <div class="popup__content">
           <button
@@ -198,22 +212,28 @@
             type="button"
           ></button>
           <h3 class="popup__title">Nuevo lugar</h3>
-          <form class="popup__form" id="new-card-form">
+          <form class="popup__form" id="new-card-form" novalidate>
             <input
+              id="card-title"
               class="popup__input popup__input_type_card-name"
               name="place-name"
               placeholder="Título"
               required
+              minlength="2"
+              maxlength="30"
               type="text"
             />
+            <span class="popup__input-error card-title-error"></span>
             <input
+              id="card-link"
               class="popup__input popup__input_type_url"
               name="link"
               placeholder="Enlace a la imagen"
               required
               type="url"
             />
-            <button class="button popup__button" type="submit">Crear</button>
+            <span class="popup__input-error card-link-error"></span>
+            <button class="button popup__button" type="submit" disabled>Crear</button>
           </form>
         </div>
       </div>
