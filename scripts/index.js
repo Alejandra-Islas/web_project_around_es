@@ -35,16 +35,8 @@ const validationConfig = {
   errorClass: "popup__input-error_active"
 };
 
-function handleEscapeClose(evt) {
-  if (evt.key === "Escape") {
-    const openedPopup = document.querySelector(".popup_is-opened");
-    if (openedPopup) {
-      openedPopup.classList.remove("popup_is-opened");
-    }
-  }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
+  // === SELECCIÓN DE ELEMENTOS EXISTENTES (PERFIL) ===
   const editPopup = document.querySelector("#edit-popup");
   const editButton = document.querySelector(".profile__edit-button");
   const closeButton = editPopup.querySelector(".popup__close");
@@ -55,9 +47,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const editProfileForm = document.querySelector("#edit-profile-form");
   const profileSaveButton = editProfileForm.querySelector(".popup__button");
 
+  // === SELECCIÓN DE ELEMENTOS (TARJETAS EXISTENTES) ===
   const cardsContainer = document.querySelector(".cards__list");
   const cardTemplate = document.querySelector("#card-template").content;
 
+  // === SELECCIÓN DE ELEMENTOS PARA "AGREGAR TARJETA" ===
   const addCardPopup = document.querySelector("#new-card-popup");
   const addButton = document.querySelector(".profile__add-button"); 
   const closeAddCardButton = addCardPopup.querySelector(".popup__close"); 
@@ -66,13 +60,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const cardLinkInput = document.querySelector(".popup__input_type_url");
   const cardSaveButton = newCardForm.querySelector(".popup__button");
 
+  // === MODAL DE IMAGEN GRANDE ===
   const imagePopup = document.querySelector("#image-popup");
   const popupImageElement = imagePopup.querySelector(".popup__image");
   const popupCaptionElement = imagePopup.querySelector(".popup__caption");
   const closeImagePopupButton = imagePopup.querySelector(".popup__close");
 
+  // Seleccionamos todos los popups de la página
   const popups = document.querySelectorAll(".popup");
 
+  // === FUNCIONES BASE DE APERTURA Y CIERRE GENERALES ===
   function openPopup(popup) {
     popup.classList.add("popup_is-opened");
     document.addEventListener("keydown", handleEscapeClose);
@@ -81,6 +78,16 @@ document.addEventListener("DOMContentLoaded", () => {
   function closePopup(popup) {
     popup.classList.remove("popup_is-opened");
     document.removeEventListener("keydown", handleEscapeClose);
+  }
+
+  // === ADAPTACIÓN DE ESCAPE CORREGIDA (Mover abajo de closePopup) ===
+  function handleEscapeClose(evt) {
+    if (evt.key === "Escape") {
+      const openedPopup = document.querySelector(".popup_is-opened");
+      if (openedPopup) {
+        closePopup(openedPopup); // <-- Ahora llama correctamente a closePopup para remover el listener
+      }
+    }
   }
 
   // === MANEJADORES DEL PERFIL ===
