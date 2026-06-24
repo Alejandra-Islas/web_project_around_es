@@ -1,0 +1,21 @@
+{
+  "name": "web_project_around_es",
+  "version": "1.0.0",
+  "description": "Una plataforma web interactiva diseñada como un portafolio de fotografía dinámico, donde los usuarios pueden explorar paisajes icónicos de los Estados Unidos, interactuar con el contenido y personalizar su perfil.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alejandra-Islas/web_project_around_es.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Alejandra-Islas/web_project_around_es/issues"
+  },
+  "homepage": "https://github.com/Alejandra-Islas/web_project_around_es#readme"
+}
