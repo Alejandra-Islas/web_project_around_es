@@ -1,5 +1,5 @@
 // FormValidator.js
-export class FormValidator {
+export default class FormValidator {
   constructor(config, formElement) {
     this._config = config;
     this._formElement = formElement;
