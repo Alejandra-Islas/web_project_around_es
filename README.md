@@ -1,6 +1,4 @@
-# Tripleten web_project_around_es
-
-# Proyecto: Around The U.S. 📸
+# Tripleten proyecto: Around The U.S. 📸
 
 Una plataforma web interactiva diseñada como un portafolio de fotografía dinámico, donde los usuarios pueden explorar paisajes icónicos de los Estados Unidos, interactuar con el contenido y personalizar su perfil.
 
@@ -21,6 +19,11 @@ El objetivo principal de este sprint fue dominar la **validación interactiva de
 2. **Mensajes personalizados:** Intercepción de errores nativos del navegador para mostrar textos específicos (como "Ingresa una URL." en el enlace de la imagen).
 3. **Control dinámico del botón de envío:** El botón "Guardar" o "Crear" cambia visualmente a un estado de "apagado" (estilo gris opaco) y se bloquea si el formulario es inválido.
 4. **Cierre avanzado de Modales:** Optimización de la experiencia de usuario permitiendo cerrar cualquier popup haciendo clic en el área oscura de la superposición (overlay) o pulsando la tecla `Esc`.
+
+## Tecnologías y Metodologías Aplicadas en este Sprint
+* **Programación Orientada a Objetos (POO):** Se modularizó todo el proyecto dividiendo las responsabilidades en clases independientes (`Card`, `Section`, `Popup`, `UserInfo`, etc.).
+* **Módulos de JavaScript (ES6):** Uso de `import` y `export default` para conectar los scripts del navegador eficientemente.
+* **Acoplamiento Débil:** Interconexión de componentes mediante funciones callback (`renderer`, `handleCardClick`) logrando un código flexible y reutilizable.
 
 ### Enlaces útiles
 * [Enlace al código del repositorio en GitHub](https://github.com/Alejandra-Islas/web_project_around_es) *(Reemplaza con tu enlace real)*

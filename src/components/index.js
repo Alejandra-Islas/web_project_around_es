@@ -1,5 +1,5 @@
-import { Card } from "./card.js";
-import { FormValidator } from "./FormValidator.js";
+import Card from "./Card.js"; // Recuerda quitarle las llaves { } porque ahora es export default
+import FormValidator from "./FormValidator.js";
 import Section from "./Section.js";
 import PopupWithImage from "./PopupWithImage.js";
 import PopupWithForm from "./PopupWithForm.js";
@@ -59,7 +59,6 @@ const editProfilePopup = new PopupWithForm("#edit-popup", (formData) => {
     name: formData.name,
     description: formData.description
   });
-  editProfilePopup.close();
 });
 editProfilePopup.setEventListeners();
 

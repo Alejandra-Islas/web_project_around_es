@@ -1,19 +1,18 @@
-export class Card {
+// src/components/Card.js
+export default class Card { // <-- Cambiado a export default
   constructor(data, cardSelector, handleCardClick) {
     this._name = data.name;
     this._link = data.link;
     this._cardSelector = cardSelector;
-    this._handleCardClick = handleCardClick; // Callback de acoplamiento débil
+    this._handleCardClick = handleCardClick;
   }
 
   _getTemplate() {
-    const cardElement = document
+    return document
       .querySelector(this._cardSelector)
       .content
       .querySelector(".card")
       .cloneNode(true);
-
-    return cardElement;
   }
 
   _handleLikeButtonClick() {
@@ -34,7 +33,6 @@ export class Card {
       this._handleDeleteButtonClick();
     });
 
-    // Cambiado: Ahora ejecuta el callback que abre el PopupWithImage externo
     this._element.querySelector(".card__image").addEventListener("click", () => {
       this._handleCardClick(this._name, this._link);
     });
