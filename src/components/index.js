@@ -70,7 +70,6 @@ const addCardPopup = new PopupWithForm("#new-card-popup", (formData) => {
   };
   const cardElement = createCard(newCardData);
   cardList.addItem(cardElement);
-  addCardPopup.close();
 });
 addCardPopup.setEventListeners();
 
