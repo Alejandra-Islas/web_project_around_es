@@ -26,6 +26,28 @@ getInitialCards() {
     }).then(this._checkResponse);
   }
 
+updateUserInfo(name, about) {
+    return fetch(`${this._baseUrl}/users/me`, {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify({
+        name: name,
+        about: about
+      })
+    }).then(this._checkResponse);
+  }
+
+addCard(name, link) {
+    return fetch(`${this._baseUrl}/cards`, {
+      method: "POST",
+      headers: this._headers,
+      body: JSON.stringify({
+        name: name,
+        link: link
+      })
+    }).then(this._checkResponse);
+  }
+
 }
 
 // Instancia configurada lista para exportar
