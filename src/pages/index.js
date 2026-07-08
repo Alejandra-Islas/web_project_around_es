@@ -4,6 +4,18 @@ import Section from "../components/Section.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
+import { api } from "../components/Api.js"; // Importa la instancia de Api
+
+api.getInitialCards()
+  .then((cards) => {
+    // 'cards' es el array que viene del servidor
+    // Ahora lo pasamos a tu instancia de Section para que las pinte
+    cardList.renderItems(cards);
+  })
+  .catch((err) => {
+    // Siempre es bueno capturar errores por si algo falla en la conexión
+    console.error("Error al cargar las tarjetas:", err);
+  });
 
 const initialCards = [
   { name: "Valle de Yosemite", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg" },
@@ -41,17 +53,21 @@ function createCard(data) {
   return card.generateCard();
 }
 
-// --- INSTANCIA DE LA SECCIÓN (RENDERIZADOR) ---
 const cardList = new Section({
-  items: initialCards,
   renderer: (item) => {
-    const cardElement = createCard(item);
-    cardList.addItem(cardElement);
+    const card = createCard(item); // Tu función que crea la tarjeta
+    cardList.addItem(card);
   }
 }, ".cards__list");
 
-// Renderizar tarjetas iniciales
-cardList.renderItems();
+// 2. Ahora el servidor es el único que manda
+api.getInitialCards()
+  .then((cards) => {
+    cardList.renderItems(cards); // Esto es lo único que debería renderizar
+  })
+  .catch((err) => {
+    console.error("Error al cargar las tarjetas:", err);
+  });
 
 // --- POPUP: EDITAR PERFIL ---
 const editProfilePopup = new PopupWithForm("#edit-popup", (formData) => {
