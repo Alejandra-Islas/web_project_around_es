@@ -20,18 +20,10 @@ export class Api {
   }
 
 getInitialCards() {
-    return fetch(`${this._baseUrl}/cards/`, {
+    return fetch(`${this._baseUrl}/cards`, {
       method: "GET",
       headers: this._headers, // Aquí usas la propiedad de la clase
     }).then(this._checkResponse);
-  }
-
-_checkResponse(res) {
-    if (res.ok) {
-      return res.json();
-    }
-    // Si res.ok es false, rechazamos la promesa con el status
-    return Promise.reject(`Error: ${res.status}`);
   }
 
 }

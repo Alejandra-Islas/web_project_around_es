@@ -6,25 +6,14 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import { api } from "../components/Api.js"; // Importa la instancia de Api
 
-api.getInitialCards()
-  .then((cards) => {
-    // 'cards' es el array que viene del servidor
-    // Ahora lo pasamos a tu instancia de Section para que las pinte
-    cardList.renderItems(cards);
-  })
-  .catch((err) => {
-    // Siempre es bueno capturar errores por si algo falla en la conexión
-    console.error("Error al cargar las tarjetas:", err);
-  });
-
-const initialCards = [
-  { name: "Valle de Yosemite", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg" },
-  { name: "Lago Louise", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg" },
-  { name: "Montañas Calvas", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_bald-mountains.jpg" },
-  { name: "Latemar", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_latemar.jpg" },
-  { name: "Parque Nacional de la Vanoise", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_vanoise.jpg" },
-  { name: "Lago di Braies", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lago.jpg" }
-];
+//const initialCards = [
+//  { name: "Valle de Yosemite", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg" },
+//  { name: "Lago Louise", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg" },
+//  { name: "Montañas Calvas", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_bald-mountains.jpg" },
+//  { name: "Latemar", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_latemar.jpg" },
+//  { name: "Parque Nacional de la Vanoise", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_vanoise.jpg" },
+//  { name: "Lago di Braies", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lago.jpg" }
+//];
 
 const validationConfig = {
   formSelector: ".popup__form",
@@ -55,37 +44,62 @@ function createCard(data) {
 
 const cardList = new Section({
   renderer: (item) => {
-    const card = createCard(item); // Tu función que crea la tarjeta
-    cardList.addItem(card);
+    const card = createCard(item);
+    cardList.addItem(card); // Esto funcionará bien porque la función renderer 
+                            // se ejecutará cuando cardList YA esté definida.
   }
 }, ".cards__list");
 
-// 2. Ahora el servidor es el único que manda
-api.getInitialCards()
-  .then((cards) => {
-    cardList.renderItems(cards); // Esto es lo único que debería renderizar
+Promise.all([api.getUserInfo(), api.getInitialCards()])
+  .then(([userData, cards]) => {
+    // 1. Mostrar info de usuario
+    userInfo.setUserInfo({
+      name: userData.name,
+      description: userData.about
+    });
+    // 2. Renderizar tarjetas iniciales
+    cardList.renderItems(cards);
   })
   .catch((err) => {
-    console.error("Error al cargar las tarjetas:", err);
+    console.error("Error al cargar datos iniciales:", err);
   });
 
-// --- POPUP: EDITAR PERFIL ---
 const editProfilePopup = new PopupWithForm("#edit-popup", (formData) => {
-  userInfo.setUserInfo({
-    name: formData.name,
-    description: formData.description
-  });
+  editProfilePopup.setLoadingButtonText("Guardando...");
+  
+  api.updateUserInfo(formData.name, formData.description)
+    .then((result) => {
+      userInfo.setUserInfo({
+        name: result.name,
+        description: result.about
+      });
+      editProfilePopup.close();
+    })
+    .catch((err) => {
+      console.error("Error al actualizar perfil:", err);
+    })
+    .finally(() => {
+      editProfilePopup.setLoadingButtonText("Guardar");
+    });
 });
 editProfilePopup.setEventListeners();
 
 // --- POPUP: NUEVA TARJETA ---
 const addCardPopup = new PopupWithForm("#new-card-popup", (formData) => {
-  const newCardData = {
-    name: formData["place-name"],
-    link: formData.link
-  };
-  const cardElement = createCard(newCardData);
-  cardList.addItem(cardElement);
+  addCardPopup.setLoadingButtonText("Guardando...");
+  
+
+  api.addCard(formData["place-name"], formData.link)
+    .then((cardData) => {
+      cardList.addItem(createCard(cardData));
+      addCardPopup.close();
+    })
+    .catch((err) => {
+      console.error("Error al crear tarjeta:", err);
+    })
+    .finally(() => {
+      addCardPopup.setLoadingButtonText("Guardar");
+    });
 });
 addCardPopup.setEventListeners();
 
@@ -108,8 +122,11 @@ const descriptionInput = document.querySelector(".popup__input_type_description"
 
 editButton.addEventListener("click", () => {
   const currentData = userInfo.getUserInfo();
+  
+  // Usamos las variables que definiste arriba en lugar de buscar en el DOM otra vez
   nameInput.value = currentData.name;
   descriptionInput.value = currentData.description;
+  
   editFormValidator.resetValidation();
   editProfilePopup.open();
 });
