@@ -1,6 +1,6 @@
 // src/components/Card.js
 export default class Card { // <-- Cambiado a export default
-  constructor(data, cardSelector, handleCardClick, handleLikeClick, userId) {
+  constructor(data, cardSelector, handleCardClick, handleLikeClick, handleDeleteClick, userId) {
   this._name = data.name;
   this._link = data.link;
   this._cardSelector = cardSelector;
@@ -8,8 +8,10 @@ export default class Card { // <-- Cambiado a export default
   
   // ¡Aquí es donde guardamos lo que faltaba!
   this._handleLikeClick = handleLikeClick; 
+  this._handleDeleteClick = handleDeleteClick;
   this._id = data._id;                     
   this._isLiked = data.isLiked;
+  this._userId = userId; // Guardamos el ID del usuario actual
   }
 
   _getTemplate() {
@@ -25,9 +27,9 @@ export default class Card { // <-- Cambiado a export default
     this._handleLikeClick(this._id, this._isLiked, this);
   }
 
-  _handleDeleteButtonClick() {
-    this._element.remove();
-    this._element = null;
+_handleDeleteButtonClick() {
+    // Le pasamos a index.js el ID de la tarjeta y la referencia a esta instancia
+    this._handleDeleteClick(this._id, this);
   }
 
 _setEventListeners() {
@@ -81,4 +83,9 @@ generateCard() {
 
   return this._element;
 }
+
+removeCard() {
+    this._element.remove();
+    this._element = null;
+  }
 }

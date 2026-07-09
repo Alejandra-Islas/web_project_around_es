@@ -67,6 +67,14 @@ removeLike(cardId) {
   }).then(this._checkResponse);
 }
 
+// Método para eliminar una tarjeta del servidor
+  deleteCard(cardId) {
+    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+      method: "DELETE",
+      headers: this._headers
+    }).then(this._checkResponse);
+  }
+
 }
 
 // Instancia configurada lista para exportar

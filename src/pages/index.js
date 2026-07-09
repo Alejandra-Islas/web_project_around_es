@@ -5,6 +5,7 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import UserInfo from "../components/UserInfo.js";
 import { api } from "../components/Api.js"; // Importa la instancia de Api
+import PopupWithConfirmation from "../components/PopupWithConfirmation.js";
 
 //const initialCards = [
 //  { name: "Valle de Yosemite", link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg" },
@@ -32,6 +33,21 @@ const userInfo = new UserInfo({
 
 let userId = null; // Esta variable vivirá en el alcance del index.js
 
+const handleLikeClick = (id, isLiked, cardInstance) => {
+  if (isLiked) {
+    api.removeLike(id)
+      .then(() => cardInstance.setLike(false))
+      .catch((err) => console.error(err));
+  } else {
+    api.addLike(id)
+      .then(() => cardInstance.setLike(true))
+      .catch((err) => console.error(err));
+  }
+};
+
+const deleteCardPopup = new PopupWithConfirmation("#delete-popup");
+deleteCardPopup.setEventListeners();
+
 // --- INSTANCIA DEL POPUP DE IMAGEN ---
 const imagePopupInstance = new PopupWithImage("#image-popup");
 imagePopupInstance.setEventListeners();
@@ -43,8 +59,22 @@ function createCard(data) {
     (name, link) => {
       imagePopupInstance.open(name, link);
     },
-    handleLikeClick, // Pasamos el manejador que definiste al final
-    userId           // Ahora la función sí puede "ver" el ID
+    handleLikeClick, 
+    // NUEVO: La función handleDeleteClick
+    (id, cardInstance) => { 
+      // 1. Le decimos al popup QUÉ hacer cuando el usuario presione "Sí"
+      deleteCardPopup.setSubmitAction(() => {
+        api.deleteCard(id)
+          .then(() => {
+            cardInstance.removeCard(); // 2. Borramos del DOM
+            deleteCardPopup.close();   // 3. Cerramos el popup
+          })
+          .catch((err) => console.error("Error al borrar tarjeta:", err));
+      });
+      // 4. Abrimos el popup
+      deleteCardPopup.open();
+    },
+    userId // Asegúrate de que el userId siga siendo el último argumento
   );
   return card.generateCard();
 }
@@ -143,16 +173,3 @@ addButton.addEventListener("click", () => {
   addCardFormValidator.resetValidation();
   addCardPopup.open();
 });
-
-// En el handleLikeClick dentro de index.js
-const handleLikeClick = (id, isLiked, cardInstance) => {
-  if (isLiked) {
-    api.removeLike(id)
-      .then(() => cardInstance.setLike(false))
-      .catch((err) => console.error(err));
-  } else {
-    api.addLike(id)
-      .then(() => cardInstance.setLike(true))
-      .catch((err) => console.error(err));
-  }
-};
