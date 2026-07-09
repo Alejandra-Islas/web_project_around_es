@@ -48,6 +48,25 @@ addCard(name, link) {
     }).then(this._checkResponse);
   }
 
+// Método para añadir un "me gusta"
+// Cambia esto:
+// fetch(`${this._baseUrl}/cards/likes/${cardId}`, ...
+
+// Por esto (asegúrate de que el ID vaya antes de "/likes"):
+addLike(cardId) {
+  return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+    method: "PUT",
+    headers: this._headers
+  }).then(this._checkResponse);
+}
+
+removeLike(cardId) {
+  return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
+    method: "DELETE",
+    headers: this._headers
+  }).then(this._checkResponse);
+}
+
 }
 
 // Instancia configurada lista para exportar

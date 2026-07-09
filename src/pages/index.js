@@ -30,15 +30,22 @@ const userInfo = new UserInfo({
   descriptionSelector: ".profile__description"
 });
 
+let userId = null; // Esta variable vivirá en el alcance del index.js
+
 // --- INSTANCIA DEL POPUP DE IMAGEN ---
 const imagePopupInstance = new PopupWithImage("#image-popup");
 imagePopupInstance.setEventListeners();
 
-// --- FUNCIÓN HELPER PARA CREAR UNA TARJETA ---
 function createCard(data) {
-  const card = new Card(data, "#card-template", (name, link) => {
-    imagePopupInstance.open(name, link);
-  });
+  const card = new Card(
+    data, 
+    "#card-template", 
+    (name, link) => {
+      imagePopupInstance.open(name, link);
+    },
+    handleLikeClick, // Pasamos el manejador que definiste al final
+    userId           // Ahora la función sí puede "ver" el ID
+  );
   return card.generateCard();
 }
 
@@ -52,12 +59,13 @@ const cardList = new Section({
 
 Promise.all([api.getUserInfo(), api.getInitialCards()])
   .then(([userData, cards]) => {
-    // 1. Mostrar info de usuario
+    userId = userData._id; // <--- ¡Guardamos el ID aquí!
+    
     userInfo.setUserInfo({
       name: userData.name,
       description: userData.about
     });
-    // 2. Renderizar tarjetas iniciales
+    
     cardList.renderItems(cards);
   })
   .catch((err) => {
@@ -135,3 +143,16 @@ addButton.addEventListener("click", () => {
   addCardFormValidator.resetValidation();
   addCardPopup.open();
 });
+
+// En el handleLikeClick dentro de index.js
+const handleLikeClick = (id, isLiked, cardInstance) => {
+  if (isLiked) {
+    api.removeLike(id)
+      .then((res) => cardInstance.setLikes(res.likes))
+      .catch((err) => console.error(err));
+  } else {
+    api.addLike(id)
+      .then((res) => cardInstance.setLikes(res.likes))
+      .catch((err) => console.error(err));
+  }
+};
