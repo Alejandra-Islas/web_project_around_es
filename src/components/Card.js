@@ -9,9 +9,8 @@ export default class Card { // <-- Cambiado a export default
   // ¡Aquí es donde guardamos lo que faltaba!
   this._handleLikeClick = handleLikeClick; 
   this._id = data._id;                     
-  this._likes = data.likes || [];          
-  this._userId = userId;                   
-}
+  this._isLiked = data.isLiked;
+  }
 
   _getTemplate() {
     return document
@@ -23,7 +22,7 @@ export default class Card { // <-- Cambiado a export default
 
 // ÚNICA versión necesaria: la que delega la lógica al index.js
   _handleLikeButtonClick() {
-    this._handleLikeClick(this._id, this._isLiked(), this);
+    this._handleLikeClick(this._id, this._isLiked, this);
   }
 
   _handleDeleteButtonClick() {
@@ -46,10 +45,11 @@ _setEventListeners() {
   });
 }
 
-  _isLiked() {
-    // Comprobamos si alguno de los usuarios en la lista de likes es el usuario actual
-    return this._likes.some((user) => user._id === this._userId);
-  }
+  setLike(newLike) {
+  this._isLiked = newLike;
+   // 2. Refrescamos la interfaz para que el usuario vea el cambio
+   this._updateLikeView();
+ }
 
 setLikes(newLikes) {
   // 1. Actualizamos la fuente de verdad interna
@@ -61,10 +61,7 @@ setLikes(newLikes) {
 
 _updateLikeView() {
   // Toggle basado en si mi ID sigue o no en la lista actualizada
-  this._likeButton.classList.toggle("card__like-button_is-active", this._isLiked());
-  
-  // Actualizamos el número de personas que dieron like
-  this._likeCounter.textContent = this._likes.length;
+  this._likeButton.classList.toggle("card__like-button_is-active", this._isLiked);
 }
 
 generateCard() {
@@ -72,8 +69,6 @@ generateCard() {
   
   // Guardamos las referencias necesarias para usar en _updateLikeView
   this._likeButton = this._element.querySelector(".card__like-button");
-  this._likeCounter = this._element.querySelector(".card__like-count");
-  
   this._setEventListeners();
 
   const cardImage = this._element.querySelector(".card__image");

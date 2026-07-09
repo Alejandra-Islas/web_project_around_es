@@ -148,11 +148,11 @@ addButton.addEventListener("click", () => {
 const handleLikeClick = (id, isLiked, cardInstance) => {
   if (isLiked) {
     api.removeLike(id)
-      .then((res) => cardInstance.setLikes(res.likes))
+      .then(() => cardInstance.setLike(false))
       .catch((err) => console.error(err));
   } else {
     api.addLike(id)
-      .then((res) => cardInstance.setLikes(res.likes))
+      .then(() => cardInstance.setLike(true))
       .catch((err) => console.error(err));
   }
 };
