@@ -54,28 +54,25 @@ imagePopupInstance.setEventListeners();
 
 function createCard(data) {
   const card = new Card(
-    data, 
-    "#card-template", 
-    (name, link) => {
-      imagePopupInstance.open(name, link);
-    },
-    handleLikeClick, 
-    // NUEVO: La función handleDeleteClick
-    (id, cardInstance) => { 
-      // 1. Le decimos al popup QUÉ hacer cuando el usuario presione "Sí"
+    data,
+    "#card-template",
+    (name, link) => { imagePopupInstance.open(name, link); },
+    handleLikeClick,
+    (id, cardInstance) => {
+      // Configuramos la acción del popup de confirmación
       deleteCardPopup.setSubmitAction(() => {
-        api.deleteCard(id)
+        api.deleteCard(id) // Usamos el método que ya creaste en Api.js
           .then(() => {
-            cardInstance.removeCard(); // 2. Borramos del DOM
-            deleteCardPopup.close();   // 3. Cerramos el popup
+            cardInstance.removeCard(); // Borra visualmente
+            deleteCardPopup.close();   // Cierra la ventana
           })
-          .catch((err) => console.error("Error al borrar tarjeta:", err));
+          .catch((err) => console.error("Error al borrar:", err));
       });
-      // 4. Abrimos el popup
       deleteCardPopup.open();
     },
-    userId // Asegúrate de que el userId siga siendo el último argumento
+    userId
   );
+  // Asegúrate de que el objeto 'data' pase el owner._id
   return card.generateCard();
 }
 
