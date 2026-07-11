@@ -6,6 +6,46 @@
   padding: 40px 0 32px;
 }
 
+/* --- NUEVO: Contenedor para el avatar y el icono --- */
+.profile__avatar-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-right: 29px; /* Mismo margen que tenía antes la imagen */
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* --- AJUSTE: La imagen ahora ocupa todo el contenedor --- */
+.profile__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block; /* Elimina espacios residuales debajo de la imagen */
+}
+
+/* --- NUEVO: Icono de edición que aparece al hacer hover --- */
+.profile__avatar-edit-icon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-image: url("../images/edit-icon.svg"); /* Asegúrate que esta ruta sea correcta */
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+/* Efecto hover sobre el contenedor */
+.profile__avatar-container:hover .profile__avatar-edit-icon {
+  opacity: 1;
+}
+
+/* --- RESTO DE TU CSS ORIGINAL --- */
 .profile__info {
   display: grid;
   grid-template-areas:
@@ -35,15 +75,6 @@
   white-space: nowrap;
   overflow: hidden;
   max-width: 373px;
-}
-
-.profile__image {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  background-position: center;
-  margin-right: 29px;
 }
 
 .profile__add-button {
@@ -78,11 +109,11 @@
   opacity: 0.6;
 }
 
+/* --- MEDIA QUERIES --- */
 @media screen and (max-width: 959px) {
   .profile__info {
     grid-template-columns: auto;
   }
-
   .profile__title {
     font-size: 32px;
     line-height: 38px;
@@ -96,7 +127,6 @@
     flex-direction: column;
     text-align: center;
   }
-
   .profile__info {
     width: 100%;
     display: flex;
@@ -106,21 +136,20 @@
     max-width: 320px;
     gap: 14px;
   }
-
   .profile__title {
     font-size: 22px;
     min-width: 201px;
     max-width: 222px;
   }
-
   .profile__description {
     width: 100%;
     font-size: 14px;
     line-height: 17px;
     max-width: 282px;
   }
-
-  .profile__image {
+  
+  /* Ajuste para móvil: el contenedor pierde el margen derecho */
+  .profile__avatar-container {
     margin-right: 0;
   }
 
@@ -129,7 +158,6 @@
     max-width: 282px;
     margin: 0 auto;
   }
-
   .profile__edit-button {
     width: 18px;
     height: 18px;

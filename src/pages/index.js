@@ -28,7 +28,8 @@ const validationConfig = {
 // --- INSTANCIA DE USUARIO ---
 const userInfo = new UserInfo({
   nameSelector: ".profile__title",
-  descriptionSelector: ".profile__description"
+  descriptionSelector: ".profile__description",
+  avatarSelector: ".profile__image"
 });
 
 let userId = null; // Esta variable vivirá en el alcance del index.js
@@ -51,6 +52,26 @@ deleteCardPopup.setEventListeners();
 // --- INSTANCIA DEL POPUP DE IMAGEN ---
 const imagePopupInstance = new PopupWithImage("#image-popup");
 imagePopupInstance.setEventListeners();
+
+const avatarPopup = new PopupWithForm("#avatar-popup", (formData) => {
+  avatarPopup.setLoadingButtonText("Guardando...");
+  
+  api.updateUserAvatar(formData.avatar)
+    .then((result) => {
+      // Actualizamos todo, incluido el avatar, usando userInfo
+      userInfo.setUserInfo({
+        name: result.name,
+        description: result.about,
+        avatar: result.avatar
+      });
+      avatarPopup.close();
+    })
+    .catch((err) => console.error("Error al actualizar avatar:", err))
+    .finally(() => {
+      avatarPopup.setLoadingButtonText("Guardar");
+    });
+});
+avatarPopup.setEventListeners();
 
 function createCard(data) {
   const card = new Card(
@@ -90,7 +111,8 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
     
     userInfo.setUserInfo({
       name: userData.name,
-      description: userData.about
+      description: userData.about,
+      avatar: userData.avatar
     });
     
     cardList.renderItems(cards);
@@ -138,6 +160,10 @@ const addCardPopup = new PopupWithForm("#new-card-popup", (formData) => {
 });
 addCardPopup.setEventListeners();
 
+const avatarForm = document.querySelector("#avatar-form");
+const avatarFormValidator = new FormValidator(validationConfig, avatarForm);
+avatarFormValidator.enableValidation();
+
 // --- INICIALIZAR VALIDACIÓN ---
 const editProfileForm = document.querySelector("#edit-profile-form");
 const newCardForm = document.querySelector("#new-card-form");
@@ -148,9 +174,14 @@ const addCardFormValidator = new FormValidator(validationConfig, newCardForm);
 editFormValidator.enableValidation();
 addCardFormValidator.enableValidation();
 
-// --- EVENT LISTENERS PARA BOTONES ---
+const avatarContainer = document.querySelector(".profile__avatar-container");
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
+
+avatarContainer.addEventListener("click", () => {
+  avatarFormValidator.resetValidation();
+  avatarPopup.open();
+});
 
 const nameInput = document.querySelector(".popup__input_type_name");
 const descriptionInput = document.querySelector(".popup__input_type_description");

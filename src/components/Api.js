@@ -75,6 +75,17 @@ removeLike(cardId) {
     }).then(this._checkResponse);
   }
 
+// Agrega esto dentro de tu clase Api
+updateUserAvatar(avatarUrl) {
+  return fetch(`${this._baseUrl}/users/me/avatar`, {
+    method: "PATCH",
+    headers: this._headers,
+    body: JSON.stringify({
+      avatar: avatarUrl
+    })
+  }).then(this._checkResponse);
+}
+
 }
 
 // Instancia configurada lista para exportar
