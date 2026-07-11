@@ -4,21 +4,29 @@ Una plataforma web interactiva diseñada como un portafolio de fotografía diná
 
 
 ### Descripción del proyecto
-Este proyecto es una aplicación web interactiva que permite a los usuarios explorar imágenes de lugares asombrosos alrededor de los Estados Unidos. Los usuarios pueden editar su información de perfil (nombre y ocupación), añadir nuevas tarjetas de lugares con títulos y enlaces de imágenes, dar "Me gusta" a las tarjetas, eliminar lugares y expandir las imágenes en una vista modal detallada.
+Este proyecto es una aplicación web interactiva que permite a los usuarios gestionar su perfil y contenido fotográfico. Los usuarios pueden editar su información personal, cambiar su foto de perfil, añadir nuevas tarjetas de lugares, dar "Me gusta", eliminar tarjetas y expandir imágenes.
 
-El objetivo principal de este sprint fue dominar la **validación interactiva de formularios** mediante JavaScript, mejorando drásticamente la experiencia de usuario (UX) según las pautas de diseño de Figma.
+El proyecto se ha transformado en una aplicación dinámica que consume una API REST, manejando datos reales desde un servidor, implementando validaciones de formularios robustas y mejorando la experiencia de usuario (UX) mediante estados de carga y feedback visual.
 
 ### Tecnologías utilizadas
-* **HTML5:** Uso de etiquetas semánticas y atributos de validación nativa (`required`, `minlength`, `maxlength`, `type="url"`, `novalidate`).
-* **CSS3:** Maquetación adaptativa (Responsive Design) con Flexbox, Grid Layout, Media Queries y pseudo-clases como `:disabled`.
-* **JavaScript (ES6):** Manipulación avanzada del DOM, control de eventos en tiempo real (`input`, `submit`, `keydown`), manejo de estados de validación (`validity.valid`, `typeMismatch`), y control de accesibilidad en modales (cierre mediante tecla Escape y clics en la superposición).
-* **Figma:** Pixel-perfect design implementation basada en la guía de diseño interactivo.
+* **HTML5:** Estructura semántica para contenedores de perfil y modales.
+* **CSS3:** Diseño responsivo (Flexbox, Grid), transiciones y estados de interacción (:hover, :disabled).
+* **JavaScript (ES6):** 
+    -Programación Asíncrona: Uso de fetch, promesas (Promise.all), y async/await para comunicación con el servidor.
+    -POO: Modularización mediante clases (Api, UserInfo, Card, PopupWithForm, Section, FormValidator).
+    -Manipulación del DOM: Actualización dinámica de interfaces tras respuestas de API.
+* **Metodologías:** BEM para nomenclatura de clases CSS y arquitectura de código modular.
 
 ### Características implementadas en este Sprint
-1. **Validación en tiempo real:** Los campos de texto se validan carácter por carácter mostrando mensajes de error personalizados debajo del input si no cumplen las reglas de longitud o requerimiento.
-2. **Mensajes personalizados:** Intercepción de errores nativos del navegador para mostrar textos específicos (como "Ingresa una URL." en el enlace de la imagen).
-3. **Control dinámico del botón de envío:** El botón "Guardar" o "Crear" cambia visualmente a un estado de "apagado" (estilo gris opaco) y se bloquea si el formulario es inválido.
-4. **Cierre avanzado de Modales:** Optimización de la experiencia de usuario permitiendo cerrar cualquier popup haciendo clic en el área oscura de la superposición (overlay) o pulsando la tecla `Esc`.
+Integración con API: Sincronización de datos con el servidor para obtener el perfil de usuario y las tarjetas iniciales, así como la persistencia de cambios (PATCH, POST, DELETE).
+
+Experiencia de Usuario (UX) Mejorada: Implementación de feedback visual ("Guardando...") en todos los formularios mediante promesas, asegurando que el usuario sepa cuándo se están procesando sus cambios.
+
+Gestión de Avatar: Funcionalidad para actualizar la foto de perfil del usuario, incluyendo validación del enlace y un contenedor personalizado con icono de edición.
+
+Validación interactiva: Validación en tiempo real con bloqueo de botones de envío y mensajes de error personalizados.
+
+Cierre avanzado de Modales: Soporte para cerrar popups mediante tecla Esc y clics en el overlay.
 
 ## Tecnologías y Metodologías Aplicadas en este Sprint
 * **Programación Orientada a Objetos (POO):** Se modularizó todo el proyecto dividiendo las responsabilidades en clases independientes (`Card`, `Section`, `Popup`, `UserInfo`, etc.).

@@ -155,7 +155,7 @@ const addCardPopup = new PopupWithForm("#new-card-popup", (formData) => {
       console.error("Error al crear tarjeta:", err);
     })
     .finally(() => {
-      addCardPopup.setLoadingButtonText("Guardar");
+      addCardPopup.setLoadingButtonText("Crear");
     });
 });
 addCardPopup.setEventListeners();
